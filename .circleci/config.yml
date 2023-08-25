@@ -42,6 +42,39 @@ jobs:
             . venv/bin/activate
             make lint
 
+  build:
+    docker:
+      - image: cimg/python:3.11.4
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+        default: "CapstoneEKS-rwcf1oiLrV5T"
+      aws-region:
+        description: |
+          AWS region
+        type: string
+        default: "us-east-1"
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt install -y tar gzip curl
+      - kubernetes/install-kubectl
+      - run:
+          name: Configure variable
+          command: |
+            echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> .env
+            echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> .env
+            echo DOCKER_HUB_PASSWORD=$DOCKER_HUB_PASSWORD >> .env
+            echo DOCKER_HUB_USERNAME=$DOCKER_HUB_USERNAME >> .env
+            cat .env 
+
 workflows:
   default:
     jobs:
