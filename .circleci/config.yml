@@ -79,3 +79,9 @@ workflows:
   default:
     jobs:
       - lint
+      - build:
+          aws-region: $AWS_DEFAULT_REGION
+          filters:
+            branches:
+              only:
+                - main
