@@ -114,6 +114,16 @@ jobs:
       - kubernetes/create-or-update-resource:
           resource-file-path: ./kubernetes/aws-authen-cm.yml
           resource-name: configmap/aws-auth
+      - run:
+          name: Test cluster
+          command: |
+            kubectl get nodes
+            kubectl get deployment
+            kubectl get pod -o wide
+            kubectl get services
+      - run:
+          name: Cleaning up
+          command: docker system prune
 
 workflows:
   default:
