@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-5
+  labels:
+    app: project-5
+  namespace: default
+spec:
+  progressDeadlineSeconds: 3600
+  replicas: 3
+  selector:
+    matchLabels:
+      app: project-5
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: project-5
+    spec:
+      containers:
+        - image: tintrandn/project-5:latest
+          imagePullPolicy: Always
+          name: project-5
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-5
+  labels:
+    app: project-5
+spec:
+  type: LoadBalancer
+  selector:
+    app: project-5
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
+      protocol: TCP
