@@ -2,3 +2,6 @@ Click==7.0
 Flask==1.0.2
 pylint==2.4.4
 pytest
+itsdangerous==1.1.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
